@@ -1,5 +1,6 @@
 {
     "dataset": "mnist",
+    "optimizer": "adam_walign",
     "optimizers_to_compare": ["adam", "sgd", "adam_walign"],
     "epochs": 10,
     "batch_size": 128,
