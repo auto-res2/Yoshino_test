@@ -1,0 +1,39 @@
+{
+    "dataset": "mnist",
+    "optimizers_to_compare": ["adam", "sgd", "adam_walign"],
+    "epochs": 10,
+    "batch_size": 128,
+    "test_batch_size": 1000,
+    "log_interval": 100,
+    "save_dir": "./models",
+    "results_dir": "./results",
+    "data_dir": "./data",
+    
+    "adam": {
+        "learning_rate": 0.001,
+        "weight_decay": 0.0001,
+        "betas": [0.9, 0.999],
+        "eps": 1e-8
+    },
+    
+    "sgd": {
+        "learning_rate": 0.01,
+        "weight_decay": 0.0001,
+        "momentum": 0.9
+    },
+    
+    "adam_walign": {
+        "learning_rate": 0.001,
+        "weight_decay": 0.0001,
+        "betas": [0.9, 0.999],
+        "eps": 1e-8,
+        "align_threshold": 0.1,
+        "caution_factor": 0.5
+    },
+    
+    "experiment_details": {
+        "description": "Comparison of ADAM-WALIGN with ADAM and SGD optimizers",
+        "metrics": ["training_loss", "validation_loss", "test_accuracy", "convergence_speed"],
+        "report_format": "detailed"
+    }
+}
