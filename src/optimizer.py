@@ -3,7 +3,7 @@ import math
 
 class AdamWAlignOptimizer(torch.optim.Optimizer):
     """
-    ADAM-WALIGN optimizer that integrates key concepts from ADOPT and cautious optimization
+    ADAM-WALIGN optimizer that integrates key concepts from ADOPT and the cautious optimization modification
     to enhance update stability and convergence integrity.
     
     The optimizer reorders momentum updates and normalization, aligns adjustments via 
@@ -100,8 +100,12 @@ class AdamWAlignOptimizer(torch.optim.Optimizer):
                 else:
                     align_mask = torch.ones_like(grad.data)
                 
-                # Update biased first moment estimate (momentum)
-                exp_avg.mul_(beta1).add_(grad, alpha=1 - beta1)
+                # MODIFICATION: Reordering momentum updates and normalization
+                # First apply normalization to the gradient
+                grad_normed = grad.data / (grad_norm + eps) if grad_norm > 0 else grad.data
+                
+                # Update biased first moment estimate with normalized gradient
+                exp_avg.mul_(beta1).add_(grad_normed, alpha=1 - beta1)
                 
                 # Update biased second raw moment estimate
                 exp_avg_sq.mul_(beta2).addcmul_(grad, grad, value=1 - beta2)
@@ -126,10 +130,19 @@ class AdamWAlignOptimizer(torch.optim.Optimizer):
                     # For multi-element tensors, use a uniform step size based on mean alignment
                     align_mask_scalar = align_mask.mean().item() if isinstance(align_mask, torch.Tensor) else align_mask
                 
+                # MODIFICATION: Refining update magnitude with caution factor
                 step_size = lr * (1.0 - (1.0 - align_mask_scalar) * caution_factor)
                 
-                # Update parameters with alignment-aware step
-                p.data.addcdiv_(exp_avg_corrected, denom, value=-step_size)
+                # MODIFICATION: Apply alignment-specific masks to update
+                # Multiply by alignment mask element-wise to align adjustments
+                if isinstance(align_mask, torch.Tensor) and align_mask.numel() > 1:
+                    update = exp_avg_corrected / denom
+                    # Apply mask to weight changes - focus more on aligned directions
+                    masked_update = update * (1.0 + align_mask * caution_factor)
+                    p.data.add_(masked_update, alpha=-step_size)
+                else:
+                    # For scalar alignment, use the standard update
+                    p.data.addcdiv_(exp_avg_corrected, denom, value=-step_size)
                 
                 # Store current gradient for next iteration's alignment calculation
                 state['prev_grad'].copy_(grad.data)

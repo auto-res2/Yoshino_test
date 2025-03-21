@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from src.optimizer import AdamWAlignOptimizer
+from optimizer import AdamWAlignOptimizer
 
 # Create a simple model
 class SimpleModel(nn.Module):
