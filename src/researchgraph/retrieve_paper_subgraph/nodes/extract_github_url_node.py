@@ -71,7 +71,8 @@ You carefully read the contents of the “Paper Outline” and select one GitHub
             messages=messate,
             response_format={"type": "json_object"},
         )
-        list_index_str = json.loads(response.choices[0].message.content)["index"]
+        content = response.choices[0].message.content
+        list_index_str = json.loads(content)["index"]
         return list_index_str
 
     def execute(self, paper_full_text: str, paper_summary: str) -> str:

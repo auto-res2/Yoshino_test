@@ -61,7 +61,8 @@ class LatexNode:
                     temperature=0,
                     response_format={"type": "json_object"},
                 )
-                structured_output = json.loads(response.choices[0].message.content)
+                content = response.choices[0].message.content
+                structured_output = json.loads(content)
                 return structured_output["latex_full_text"]
             except Exception as e:
                 print(f"[Attempt {attempt+1}/{max_retries}] Error calling LLM: {e}")
