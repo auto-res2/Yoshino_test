@@ -41,7 +41,10 @@ def select_best_paper_node(
     )
     structured_output = json.loads(response.choices[0].message.content)
     arxiv_id_str = structured_output["selected_arxiv_id"]
-    arxiv_id_list = [arxiv_id.strip() for arxiv_id in arxiv_id_str.split('\n') if arxiv_id.strip()]
+    if isinstance(arxiv_id_str, list):
+        arxiv_id_list = [arxiv_id.strip() for arxiv_id in arxiv_id_str if arxiv_id.strip()]
+    else:
+        arxiv_id_list = [arxiv_id.strip() for arxiv_id in arxiv_id_str.split('\n') if arxiv_id.strip()]
     print(f"Selected arxiv ids: {arxiv_id_list}")
     return arxiv_id_list
 
