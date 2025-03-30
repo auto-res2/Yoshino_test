@@ -36,6 +36,7 @@ def select_best_paper_node(
         model=llm_name,
         messages=[
             {"role": "user", "content": f"{prompt}"},
+            {"role": "system", "content": "Your response must be in JSON format."},
         ],
         response_format={"type": "json_object"},
     )

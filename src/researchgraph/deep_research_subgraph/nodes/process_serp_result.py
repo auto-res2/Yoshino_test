@@ -57,6 +57,8 @@ async def generate_object(
     # Output format:
     List of learnings, max of {num_learnings}
     List of follow-up questions to research the topic further, max of {num_followups}
+    
+    Return your response in JSON format with the keys "learnings" and "followup_questions".
     """
 
     client = AsyncOpenAI()

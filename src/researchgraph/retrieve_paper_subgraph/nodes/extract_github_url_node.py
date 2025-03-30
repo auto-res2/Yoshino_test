@@ -47,12 +47,13 @@ class ExtractGithubUrlNode:
                 "role": "system",
                 "content": """
 # Task
-You carefully read the contents of the “Paper Outline” and select one GitHub link from the “GitHub URLs List” that you think is most relevant to the contents.
+You carefully read the contents of the "Paper Outline" and select one GitHub link from the "GitHub URLs List" that you think is most relevant to the contents.
 
 # Constraints
 - Output the index number corresponding to the selected GitHub URL.
 - Be sure to select only one GiHub URL.
-- If there is no related GitHub link, output an empty string.""",
+- If there is no related GitHub link, output an empty string.
+- Return your answer in JSON format with a single key "index".""",
             },
             {
                 "role": "user",
@@ -94,7 +95,8 @@ You carefully read the contents of the “Paper Outline” and select one GitHub
 
 
 if __name__ == "__main__":
-    extract_github_url_node = ExtractGithubUrlNode()
+    extract_github_url_node = ExtractGithubUrlNode(llm_name="gpt-4o-mini-2024-07-18")
     paper_text = ""
-    github_urls = extract_github_url_node.execute(paper_text)
+    paper_summary = "Sample paper summary for testing"
+    github_urls = extract_github_url_node.execute(paper_text, paper_summary)
     print(github_urls)

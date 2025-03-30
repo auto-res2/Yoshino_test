@@ -80,7 +80,7 @@ User Query: {{ queries }}
 5. **Instead, focus on core theoretical concepts, mathematical principles, and model advancements** rather than how they are used in real-world industries.
 
 **Format**
-1. **Output must be a valid Python dictionary literal that can be parsed by `ast.literal_eval`.**
+1. **Output must be a valid JSON and Python dictionary literal that can be parsed by `ast.literal_eval`.**
     - The dictionary must have exactly five keys: `"generated_query_1"`, `"generated_query_2"`, `"generated_query_3"`, `"generated_query_4"`, `"generated_query_5"`.
     - Each key's value must be a string representing a search query.
     - Example:
